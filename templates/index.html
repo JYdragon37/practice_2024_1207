@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>내 첫 Flask 웹페이지</title>
+    <style>
+        /* 기존 스타일은 유지하고 새로운 스타일 추가 */
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .trend-button {
+            background-color: #2196F3;  /* 트렌드 버튼은 다른 색상 사용 */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .trend-button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <h1>안녕하세요!</h1>
+    <p>Flask로 만든 첫 번째 웹페이지입니다.</p>
+    <p>현재 시간: {{ current_time }}</p>
+
+    <form action="/greet" method="post">
+        <label for="name">이름을 입력하세요:</label><br>
+        <input type="text" id="name" name="name" required>
+        <input type="submit" value="제출">
+    </form>
+
+    <div class="button-container">
+        <a href="/trend" class="trend-button">실시간 트렌드 보기</a>
+    </div>
+</body>
+</html>

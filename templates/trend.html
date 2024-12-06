@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>실시간 트렌드</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .trend-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .trend-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        a.home-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>실시간 인기 검색어</h1>
+    <div class="trend-list">
+        {% for trend in trends %}
+            <div class="trend-item">
+                {{ loop.index }}. {{ trend }}
+            </div>
+        {% endfor %}
+    </div>
+    <a href="/" class="home-button">홈으로</a>
+</body>
+</html>
