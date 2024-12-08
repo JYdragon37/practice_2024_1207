@@ -1,39 +1,274 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>내 첫 Flask 웹페이지</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coli-Bot Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instagram+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* 기존 스타일은 유지하고 새로운 스타일 추가 */
-        .button-container {
-            margin-top: 20px;
-            text-align: center;
+        body {
+            font-family: 'Instagram Sans', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
         }
-        .trend-button {
-            background-color: #2196F3;  /* 트렌드 버튼은 다른 색상 사용 */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
-            display: inline-block;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
-        .trend-button:hover {
-            background-color: #1976D2;
+
+        .dashboard-time {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .dashboard-date {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .weather-card {
+            grid-column: span 12;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .trends-card {
+            grid-column: span 4;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .news-card {
+            grid-column: span 8;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .weather-image {
+            max-width: 60%;  /* 100%에서 60%로 변경 */
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;  /* 중앙 정렬을 위해 추가 */
+        }
+        .weather-container {
+            text-align: center;
+            padding: 20px;  /* 여백 추가로 시각적 균형 개선 */
+        }
+
+        .trend-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .trend-number {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 1rem;
+            min-width: 24px;
+        }
+
+        .news-category-group {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+            font-weight: 500;
+        }
+
+        .news-item {
+            padding: 0.75rem;
+            transition: background-color 0.2s;
+        }
+
+        .news-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .news-link {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .news-link:hover {
+            color: #4CAF50;
+        }
+
+        .section-tag {
+            background-color: #4CAF50;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1024px) {
+            .trends-card {
+                grid-column: span 5;
+            }
+            .news-card {
+                grid-column: span 7;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .trends-card, .news-card {
+                grid-column: span 12;
+            }
+            .dashboard-time {
+                font-size: 1.5rem;
+            }
+            .card-header {
+                padding: 1rem;
+            }
+            .card-body {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>안녕하세요!</h1>
-    <p>Flask로 만든 첫 번째 웹페이지입니다.</p>
-    <p>현재 시간: {{ current_time }}</p>
-
-    <form action="/greet" method="post">
-        <label for="name">이름을 입력하세요:</label><br>
-        <input type="text" id="name" name="name" required>
-        <input type="submit" value="제출">
-    </form>
-
-    <div class="button-container">
-        <a href="/trend" class="trend-button">실시간 트렌드 보기</a>
+    <div class="dashboard-header">
+        <h1>Hello Coli</h1>
+        <div class="dashboard-time" id="current-time"></div>
+        <div class="dashboard-date" id="current-date"></div>
     </div>
+
+    <div class="container">
+        <div class="grid-container">
+            <div class="weather-card">
+                <div class="card-header">
+                    🌤️ 오늘의 날씨
+                </div>
+                <div class="card-body weather-container">
+                    {% if weather_image %}
+                        <img src="{{ weather_image }}" alt="오늘의 날씨" class="weather-image">
+                    {% else %}
+                        <p>날씨 정보를 불러올 수 없습니다.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="trends-card">
+                <div class="card-header">
+                    🔥 실시간 트렌드
+                </div>
+                <div class="card-body">
+                    {% for trend in trends %}
+                        <div class="trend-item">
+                            <span class="trend-number">#{{ loop.index }}</span>
+                            {{ trend }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="card-header">
+                    📰 실시간 뉴스
+                </div>
+                <div class="card-body">
+                    {% set icons = {'종합': '📑', '경제': '💰', '세계': '🌏', 'IT': '💻'} %}
+                    {% set section_order = ['종합', '경제', '세계', 'IT'] %}
+                    {% for section in section_order %}
+                        {% set items = news_items|selectattr('section', 'equalto', section)|list %}
+                        {% if items %}
+                            <div class="news-category-group">
+                                <div class="category-title">
+                                    {{ icons[section] }} {{ section }}
+                                </div>
+                                {% for news in items %}
+                                    <div class="news-item">
+                                        <a href="{{ news.link }}" target="_blank" class="news-link">
+                                            <span class="section-tag">{{ loop.index }}</span>
+                                            {{ news.title }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                timeZone: 'Asia/Seoul',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            const dateOptions = {
+                timeZone: 'Asia/Seoul',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            };
+
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('ko-KR', options);
+            document.getElementById('current-date').textContent = now.toLocaleDateString('ko-KR', dateOptions);
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-run =  ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+run = ["python3", "main.py"]
 entrypoint = "main.py"
 modules = ["python-3.11"]
 
@@ -8,13 +8,12 @@ hidden = [".pythonlibs"]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 main:app"]
-deploymentTarget = "cloudrun"
+run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+build = ["pip", "install", "-r", "requirements.txt"]
 
-packages = [
-    "chromium",
-    "chromedriver",
-]
+[env]
+PYTHONPATH = "${PYTHONPATH}:${REPL_HOME}"
+PORT = "5000"
 
 [[ports]]
 localPort = 5000
